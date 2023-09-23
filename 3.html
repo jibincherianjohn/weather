@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./weather.css">
+    <title>Weather Forcast</title>
+</head>
+
+<body>
+    <img class="i1" src="./images/wolfgang-hasselmann-br-gllg7bs-unsplash-2_ver_1.jpg" alt="">
+    <input id="pname" class="i2 bg-black border border-success" type="search" placeholder="Search your location">
+    <button onclick="weatherSearch()" class="b1" type="button">Search</button><button onclick="getLocation()" id="loc"
+        class="b1">Access Location</button>
+
+    <div class="container">
+        <p id="lname"></p>
+   
+    </div>
+    <div id="result" class="row">
+        <div class="col-3 c1"><i class="fa-solid fa-temperature-high fa-2xl"></i><br>
+            <p>Temp-Max</p>
+            <p id="tmax"></p>
+        </div>
+        <div class="col-3 c1"><i class="fa-solid fa-temperature-high fa-2xl"></i><br>
+            <p>Temp-Min</p>
+            <p id="tmin"></p>
+        </div>
+        <div class="col-3 c1">
+            <i class="fa-solid fa-wind fa-2xl"></i><br>
+            <p>Wind Speed</p>
+            <p id="wspeed"></p>
+        </div>
+        <div class="col-3 c1">
+            <i class="fa-solid fa-droplet fa-2xl"></i><br>
+            <p>Humidity</p>
+            <p id="humd"></p>
+        </div>
+    </div>
+
+</body>
+<script>
+    function weatherSearch() {
+        cityName = pname.value
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=b41ec3be35c7dac8aabbc21ba253137a`).then(details => details.json())
+            .then(outdata => displayData(outdata))
+        function displayData(details) {
+            place = details.name
+            tempMax = details.main.temp_max
+            tempMin = details.main.temp_min
+            windSpeed = details.wind.speed
+            humid = details.main.humidity
+
+            c = tempMax - 273.15
+            c = Math.floor(100 * c) / 100;
+
+            lname.innerHTML = place
+            tmax.innerHTML = c + ` °C`
+            tmin.innerHTML = c + ` °C`
+            wspeed.innerHTML = windSpeed + ` km/h`
+            humd.innerHTML = humid + ` %`
+
+           
+
+
+        }
+    }
+
+
+
+
+
+    var x = document.getElementById("loc");
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+            "<br>Longitude: " + position.coords.longitude;
+    }
+
+</script>
+
+</html>
